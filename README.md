@@ -5,8 +5,12 @@ PhantomCSS
 ==========
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 *CSS regression testing*. An integration of [js-imagediff](/HumbleSoftware/js-imagediff) with [PhantomJS](/ariya/phantomjs/) and [CasperJS](/n1k0/casperjs) for automating visual regression testing and test coverage of Website styling to support refactoring of CSS.
+=======
+*CSS regression testing*. An integration of [js-imagediff](http://github.com/HumbleSoftware/js-imagediff) with [PhantomJS](http://github.com/ariya/phantomjs/) and [CasperJS](http://github.com/n1k0/casperjs) for automating visual regression testing and test coverage of Website styling to support refactoring of CSS.
+>>>>>>> Fixed links.
 
 ### Why?
 
@@ -14,13 +18,13 @@ The problem with functional UI tests is that they make assertions on HTML markup
 
 ### How?
 
-PhantomCSS takes screenshots captured by PhantomJS and compares them to baseline images using [js-imagediff](/HumbleSoftware/js-imagediff) to test for rgb pixel differences with HTML5 canvas.
+PhantomCSS takes screenshots captured by PhantomJS and compares them to baseline images using [js-imagediff](http://github.com/HumbleSoftware/js-imagediff) to test for rgb pixel differences with HTML5 canvas.
 
-PhantomCSS can only work when UI is predictable. It's possible to hide mutable UI components with PhantomCSS but it would be better if could drive the UI from faked data during test runs.  Take a look at [PhantomXHR](/Huddle/PhantomXHR) for mocking XHR requests.
+PhantomCSS can only work when UI is predictable. It's possible to hide mutable UI components with PhantomCSS but it would be better if could drive the UI from faked data during test runs.  Take a look at [PhantomXHR](http://github.com/Huddle/PhantomXHR) for mocking XHR requests.
 
 ### Example
 
-Check out the [demo](/Huddle/PhantomCSS/tree/master/demo) for a full working example (run `phantomjs demo/testsuite.js` from the command line).
+Check out the [demo](http://github.com/Huddle/PhantomCSS/tree/master/demo) for a full working example (run `phantomjs demo/testsuite.js` from the command line).
 
 ```javascript
 
@@ -48,5 +52,9 @@ css.compareAll();
 
 --------------------------------------
 
+<<<<<<< HEAD
 Created by [James Cryer](/jamescryer) and the Huddle development team.
 >>>>>>> Added demo and updated README
+=======
+Created by [James Cryer](http://github.com/jamescryer) and the Huddle development team.
+>>>>>>> Fixed links.
