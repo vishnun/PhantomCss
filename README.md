@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 **Huddle is Hiring!** We're always looking for talented Developers and Test Engineers. Visit http://www.huddle.com/careers for open vacancies now, or register your interest for the future.
 
->>>>>>> Updated README with Huddle hiring headline
 PhantomCSS
 ==========
 
@@ -65,7 +60,7 @@ phantomcss.init({
 	screenshotRoot: './screenshots',
 
 	/*
-		By default, failure images are put in the './failures' folder. If failedComparisonsRoot is set to false a seperate folder will not be created but failure images can still be found alongside the original and new images.
+		By default, failure images are put in the './failures' folder. If failedComparisonsRoot is set to false a separate folder will not be created but failure images can still be found alongside the original and new images.
 	*/
 	failedComparisonsRoot: './failures',
 
@@ -313,13 +308,5 @@ Visit http://www.huddle.com/careers for open vacancies now, or register your int
 
 --------------------------------------
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 Created by [James Cryer](http://github.com/jamescryer) and the Huddle development team.
->>>>>>> Mentioned filename ability to README
-=======
-Created by [James Cryer](http://github.com/jamescryer) and the Huddle development team.
->>>>>>> Updated README
-=======
 PhantomCSS was created by [James Cryer](http://github.com/jamescryer) and the Huddle development team.
->>>>>>> update to README
