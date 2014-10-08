@@ -24,6 +24,8 @@ var _resembleOutputSettings;
 var _cleanupComparisonImages = false;
 var diffsCreated = [];
 
+var _resemblePath;
+
 exports.screenshot = screenshot;
 exports.compareAll = compareAll;
 exports.compareMatched = compareMatched;
@@ -48,6 +50,8 @@ function update(options){
 	casper = options.casper || casper;
 	_libraryRoot = options.libraryRoot || _libraryRoot;
 	
+	_resemblePath = _libraryRoot+fs.separator+'ResembleJs'+fs.separator+'resemble.js';
+
 	_src = stripslash(options.screenshotRoot || _src);
 	_results = stripslash(options.comparisonResultRoot || _results || _src);
 	_failures = options.failedComparisonsRoot === false ? false : stripslash( options.failedComparisonsRoot || _failures);
@@ -298,7 +302,7 @@ function compareSession(list){
 }
 
 function compareFiles(baseFile, file) {
-	var html = _libraryRoot+fs.separator+"ResembleJs"+fs.separator+"resemblejscontainer.html";
+	var html = '.'+fs.separator+"resemblejscontainer.html";
 	var test = {
 		filename: baseFile
 	};
@@ -428,7 +432,7 @@ function waitForTests(tests){
 
 function initClient(){
 
-	casper.page.injectJs(_libraryRoot+fs.separator+'ResembleJs'+fs.separator+'resemble.js');
+	casper.page.injectJs(_resemblePath);
 
 	casper.evaluate(function(mismatchTolerance, resembleOutputSettings){
 		
