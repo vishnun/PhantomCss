@@ -85,6 +85,34 @@ casper.test.begin( 'E6 module', function ( test ) {
     });
   });
 
+
+  casper.thenOpen('http://ci-pdp.sony.co.uk:9000/electronics/module-demos/module_demo_e6',function(){
+    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
+    casper.wait(1000, function () {
+      documentHeight = casper.getElementsBounds('body')[0]['height'];
+      phantomcss.screenshot({
+        top: 0,
+        left: 0,
+        width: viewportWidth,
+        height: documentHeight
+      }, 'e6');
+    });
+  });
+
+
+  casper.thenOpen('http://ci-pdp.sony.co.uk:9000/captions_demo_page',function(){
+    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
+    casper.wait(5000, function () {
+      documentHeight = casper.getElementsBounds('body')[0]['height'];
+      phantomcss.screenshot({
+        top: 0,
+        left: 0,
+        width: viewportWidth,
+        height: documentHeight
+      }, 'cdp');
+    });
+  });
+
   casper.then(function () {
 
     casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
