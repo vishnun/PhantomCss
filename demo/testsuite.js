@@ -7,12 +7,7 @@ var fs = require( 'fs' );
 var path = fs.absolute( fs.workingDirectory + '/phantomcss.js' );
 var phantomcss = require( path );
 require(fs.absolute(fs.workingDirectory + '/libs/jquery'));
-
 var configs = require(fs.absolute(fs.workingDirectory + '/testConfig.json'));
-
-casper.echo("Configs: ");
-casper.echo(configs["test"]);
-
 
 casper.test.begin( 'E6 module', function ( test ) {
 
@@ -57,87 +52,40 @@ casper.test.begin( 'E6 module', function ( test ) {
 
 	casper.on( 'resource.error', function ( err ) {
 		casper.log( 'Resource load error: ' + err, 'warning' );
-	} );
-  var viewportWidth = 1200;
-  var viewportHeight = 1024;
-  var documentHeight;
+	});
+
+  var viewportWidth = configs['global']['viewports'][0]['width'];
+  var viewportHeight = configs['global']['viewports'][0]['height'];
   /*
    The test scenario
    */
-  casper.start( 'http://ci-pdp.sony.co.uk:9000/electronics/module-demos/module_demo_e6', function() {
+  casper.start( 'http://ci-pdp.sony.co.uk:9000/', function() {
     this.echo('Current location is ' + this.getCurrentUrl(), 'info');
   });
 
   casper.viewport(viewportWidth, viewportHeight );
 
+  casper.eachThen(configs['tests'], function (response) {
 
-  casper.then(function () {
+    var testObj = response.data;
+    var url = configs['global']['baseUrl'] + testObj['relativeUrl'];
+    var waitTime = testObj['waitTime'] || configs['global']['waitTime'];
 
-    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
-    casper.wait(1000, function () {
-      documentHeight = casper.getElementsBounds('body')[0]['height'];
-      phantomcss.screenshot({
-        top: 0,
-        left: 0,
-        width: viewportWidth,
-        height: documentHeight
-      }, 'e6');
-    });
-  });
+    casper.echo("Url: " + url);
+    casper.echo("waitTime: " + waitTime);
+    casper.echo("moduleName: " + testObj['moduleName']);
 
-
-  casper.thenOpen('http://ci-pdp.sony.co.uk:9000/electronics/module-demos/module_demo_e6',function(){
-    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
-    casper.wait(1000, function () {
-      documentHeight = casper.getElementsBounds('body')[0]['height'];
-      phantomcss.screenshot({
-        top: 0,
-        left: 0,
-        width: viewportWidth,
-        height: documentHeight
-      }, 'e6');
-    });
-  });
-
-
-  casper.thenOpen('http://ci-pdp.sony.co.uk:9000/captions_demo_page',function(){
-    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
-    casper.wait(5000, function () {
-      documentHeight = casper.getElementsBounds('body')[0]['height'];
-      phantomcss.screenshot({
-        top: 0,
-        left: 0,
-        width: viewportWidth,
-        height: documentHeight
-      }, 'cdp');
-    });
-  });
-
-  casper.then(function () {
-
-    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
-    casper.wait(1000, function () {
-      documentHeight = casper.getElementsBounds('body')[0]['height'];
-      phantomcss.screenshot({
-        top: 0,
-        left: 0,
-        width: viewportWidth,
-        height: documentHeight
-      }, 'e6');
-    });
-  });
-
-  casper.then(function () {
-
-    casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
-    casper.wait(1000, function () {
-      documentHeight = casper.getElementsBounds('body')[0]['height'];
-      phantomcss.screenshot({
-        top: 0,
-        left: 0,
-        width: viewportWidth,
-        height: documentHeight
-      }, 'e6');
+    casper.thenOpen(url,function(){
+      casper.viewport(viewportWidth, casper.getElementsBounds('body')[0]['height']);
+      casper.wait(waitTime, function () {
+        var documentHeight = casper.getElementsBounds('body')[0]['height'];
+        phantomcss.screenshot({
+          top: 0,
+          left: 0,
+          width: viewportWidth,
+          height: documentHeight
+        }, testObj['moduleName']);
+      });
     });
   });
 

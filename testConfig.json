@@ -1,8 +1,32 @@
 {
-  "test": "ok",
-  "test2": "also ok",
-  "subtest": {
-    "subtest": true,
-    "bool": "false"
-  }
+  "global": {
+    "baseUrl":"http://ci-pdp.sony.co.uk:9000",
+    "waitTime": 1000,
+    "viewports": [
+      {
+        "height": 1024,
+        "width": 1200
+      },
+      {
+        "height": 540,
+        "width": 480
+      }
+    ]
+  },
+  "tests": [
+    {
+      "moduleName": "E6",
+      "relativeUrl": "/electronics/module-demos/module_demo_e6",
+      "waitTime": 10000
+    },
+    {
+      "moduleName": "captions_demo_page",
+      "relativeUrl": "/captions_demo_page",
+      "waitTime": 5000
+    },
+    {
+      "moduleName": "module_demo_pages",
+      "relativeUrl": "/electronics/module-demos/t/module_demos_pages_t"
+    }
+  ]
 }

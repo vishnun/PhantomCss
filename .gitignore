@@ -1,5 +1,7 @@
 #screenshots folder
+
 /screenshots
+.idea/
 
 #IDE config
 node_modules
