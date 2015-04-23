@@ -1,0 +1,8 @@
+{
+  "test": "ok",
+  "test2": "also ok",
+  "subtest": {
+    "subtest": true,
+    "bool": "false"
+  }
+}
