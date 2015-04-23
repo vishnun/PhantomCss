@@ -6,6 +6,20 @@
 var fs = require( 'fs' );
 var path = fs.absolute( fs.workingDirectory + '/phantomcss.js' );
 var phantomcss = require( path );
+require(fs.absolute(fs.workingDirectory + '/libs/jquery'));
+
+//var casper = require('casper').create({
+//  clientScripts:  [
+//    'includes/jquery.js',      // These two scripts will be injected in remote
+//    'includes/underscore.js'   // DOM on every request
+//  ],
+//  pageSettings: {
+//    loadImages:  true,        // The WebPage instance used by Casper will
+//    loadPlugins: true         // use these settings
+//  },
+//  logLevel: "info",              // Only "info" level messages will be logged
+//  verbose: true                  // log messages will be printed out to the console
+//});
 
 casper.test.begin( 'Coffee machine visual tests', function ( test ) {
 
@@ -42,7 +56,7 @@ casper.test.begin( 'Coffee machine visual tests', function ( test ) {
 
 	casper.on( 'remote.message', function ( msg ) {
 		this.echo( msg );
-	} )
+	} );
 
 	casper.on( 'error', function ( err ) {
 		this.die( "PhantomJS has errored: " + err );
@@ -54,52 +68,136 @@ casper.test.begin( 'Coffee machine visual tests', function ( test ) {
 	/*
 		The test scenario
 	*/
-	casper.start( fs.absolute( fs.workingDirectory + '/demo/coffeemachine.html' ) );
+	casper.start( 'http://ci-pdp.sony.co.uk:9000/captions_demo_page', function() {
+    this.echo('Current location is ' + this.getCurrentUrl(), 'info');
+  });
 
-	casper.viewport( 1024, 768 );
+  //casper.start( 'http://ci-pdp.sony.co.uk:9000/electronics/module-demos/module_demo_e1', function() {
+  //  this.echo('Current location is ' + this.getCurrentUrl(), 'info');
+  //});
+
+  var viewportWidth = 1200;
+  var viewportHeight = 1024;
+  casper.viewport(viewportWidth, viewportHeight );
+  //
+  var documentHeight;
+  //
+  //var scrollPage = function () {
+  //  this.wait(2000, function() {
+  //    this.echo("I've waited for 2 seconds.");
+  //
+  //    var currentScrollY = window.scrollY + window.innerHeight;
+  //
+  //    (currentScrollY >= document.documentElement.scrollHeight);
+  //
+  //
+  //  });
+  //};
 
 	casper.then( function () {
-		phantomcss.screenshot( '#coffee-machine-wrapper', 'open coffee machine button' );
+
+    this.echo("Scroll started");
+
+
+    documentHeight = casper.getElementsBounds('body')[0]['height'];
+    var scrollY = viewportHeight;
+    while(scrollY < documentHeight){
+      casper.wait(1000, function(){
+        casper.scrollTo(0, scrollY);
+      });
+      scrollY = scrollY + 300;
+      documentHeight = casper.getElementsBounds('html')[0]['height'];
+    }
+
+    this.echo("Scroll finished");
+
+
+    //casper.evaluate(function() {
+    //  $.each($('.iq-img'), function( index, imgEl ) {
+    //    var src = $(imgEl).data('src-desktop');
+    //    $(imgEl).css('background-image', "url(" + src + ")");
+    //  });
+    //
+    //  $.each($('.image-module'), function( index, imgEl ) {
+    //    var src = $(imgEl).data('src-desktop');
+    //    $(imgEl).css('background-image', "url(" + src + ")");
+    //  });
+    //
+    //});
+
+    casper.waitFor(function() {
+      return this.evaluate(function() {
+        $.each($('.iq-img'), function( index, imgEl ) {
+          var src = $(imgEl).data('src-desktop');
+          $(imgEl).css('background-image', "url(" + src + ")");
+        });
+        //
+        //$.each($('.image-module'), function( index, imgEl ) {
+        //  var src = $(imgEl).data('src-desktop');
+        //  $(imgEl).css('background-image', "url(" + src + ")");
+        //});
+        return true;
+      });
+    }, function(){
+      casper.wait(20000, function() {
+        documentHeight = casper.getElementsBounds('body')[0]['height'];
+        phantomcss.screenshot({
+          top: 0,
+          left: 0,
+          width: viewportWidth,
+          height: documentHeight
+        }, 'module');
+      });
+    });
+
+    //casper.wait(5000, function(){
+      //casper.capture('screenshots/' + 'body' + '/' + 'viewport.name' + '-' + 'viewport.viewport.width' + 'x' + 'viewport.viewport.height' + '.png', {
+      //  top: 0,
+      //  left: 0,
+      //  width: viewportWidth,
+      //  height: documentHeight
+      //});
+    //});
 	} );
 
-	casper.then( function () {
-		casper.click( '#coffee-machine-button' );
+	// casper.then( function () {
+	// 	casper.click( '#coffee-machine-button' );
 
-		// wait for modal to fade-in 
-		casper.waitForSelector( '#myModal:not([style*="display: none"])',
-			function success() {
-				phantomcss.screenshot( '#myModal', 'coffee machine dialog' );
-			},
-			function timeout() {
-				casper.test.fail( 'Should see coffee machine' );
-			}
-		);
-	} );
+	// 	// wait for modal to fade-in 
+	// 	casper.waitForSelector( '#myModal:not([style*="display: none"])',
+	// 		function success() {
+	// 			phantomcss.screenshot( '#myModal', 'coffee machine dialog' );
+	// 		},
+	// 		function timeout() {
+	// 			casper.test.fail( 'Should see coffee machine' );
+	// 		}
+	// 	);
+	// } );
 
-	casper.then( function () {
-		casper.click( '#cappuccino-button' );
-		phantomcss.screenshot( '#myModal', 'cappuccino success' );
-	} );
+	// casper.then( function () {
+	// 	casper.click( '#cappuccino-button' );
+	// 	phantomcss.screenshot( '#myModal', 'cappuccino success' );
+	// } );
 
-	casper.then( function () {
-		casper.click( '#close' );
+	// casper.then( function () {
+	// 	casper.click( '#close' );
 
-		// wait for modal to fade-out
-		casper.waitForSelector( '#myModal[style*="display: none"]',
-			function success() {
-				phantomcss.screenshot( {
-					'Coffee machine close success': {
-						selector: '#coffee-machine-wrapper',
-						ignore: '.selector'
-					},
-					'Coffee machine button success': '#coffee-machine-button'
-				} );
-			},
-			function timeout() {
-				casper.test.fail( 'Should be able to walk away from the coffee machine' );
-			}
-		);
-	} );
+	// 	// wait for modal to fade-out
+	// 	casper.waitForSelector( '#myModal[style*="display: none"]',
+	// 		function success() {
+	// 			phantomcss.screenshot( {
+	// 				'Coffee machine close success': {
+	// 					selector: '#coffee-machine-wrapper',
+	// 					ignore: '.selector'
+	// 				},
+	// 				'Coffee machine button success': '#coffee-machine-button'
+	// 			} );
+	// 		},
+	// 		function timeout() {
+	// 			casper.test.fail( 'Should be able to walk away from the coffee machine' );
+	// 		}
+	// 	);
+	// } );
 
 	casper.then( function now_check_the_screenshots() {
 		// compare screenshots

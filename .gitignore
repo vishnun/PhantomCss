@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 #screenshots folder
 /screenshots
 
 #IDE config
-.idea/
 node_modules
-=======
-node_modules
-screenshots
 failures
->>>>>>> tidying resemble dependency
